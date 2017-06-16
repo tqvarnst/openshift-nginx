@@ -26,7 +26,7 @@ ADD nginx.repo /etc/yum.repos.d/nginx.repo
 COPY help.md /tmp/
 
 RUN REPOLIST=rhel-7-server-rpms,rhel-7-server-optional-rpms,nginx \
-    INSTALL_PKGS="golang-github-cpuguy83-go-md2man nginx-${NGINX_VERSION}" && \
+    INSTALL_PKGS="golang-github-cpuguy83-go-md2man nginx-${NGINX_VERSION}.ngx" && \
     curl -sO http://nginx.org/keys/nginx_signing.key && \
     rpm --import ./nginx_signing.key && \
     yum -y install --disablerepo "*" --enablerepo ${REPOLIST} --setopt=tsflags=nodocs ${INSTALL_PKGS} && \
