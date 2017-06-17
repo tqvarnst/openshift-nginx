@@ -1,3 +1,4 @@
+Build the image
 ```shell
 # build on centos7
 $ make
@@ -7,7 +8,8 @@ $ make
 # build on rhel7
 $ make TARGET=rhel7
 ```
+Run the image
 ```shell
-$ docker run -tdi -u $(id -u) -p 80:8080 -v $(mktemp -d /tmp/nginx.XXXXX):/var/cache/nginx:Z nginxinc/openshift-nginx
-$ curl localhost
+$ make run
+$ curl localhost:8080
 ```

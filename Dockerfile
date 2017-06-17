@@ -13,7 +13,7 @@ LABEL name="nginxinc/nginx" \
 ### Required labels above - recommended below
       url="https://www.nginx.com/" \
       io.k8s.display-name="NGINX" \
-      io.openshift.expose-services="http,https" \
+      io.openshift.expose-services="http:8080" \
       io.openshift.tags="nginx,nginxinc"
 #      run='docker run -tdi --name ${NAME} \
 #        -u $(id -u) \
