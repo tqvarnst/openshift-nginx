@@ -8,13 +8,13 @@ LABEL name="nginxinc/nginx" \
       vendor="NGINX Inc." \
       version="${NGINX_VERSION}" \
       release="1" \
+      summary="NGINX" \
+      description="nginx will do ....." \
 ### Required labels above - recommended below
       url="https://www.nginx.com/" \
       io.k8s.display-name="NGINX" \
       io.openshift.expose-services="http,https" \
       io.openshift.tags="nginx,nginxinc"
-#      summary="NGINX" \
-#      description="Starter app will do ....." \
 #      run='docker run -tdi --name ${NAME} \
 #        -u $(id -u) \
 #        -p 80:8080 \

@@ -1,0 +1,19 @@
+sudo: required
+dist: trusty
+
+services:
+ - docker
+
+addons:
+  apt:
+    packages:
+    - nodejs
+
+install:
+  - npm install -g dockerfile_lint
+
+before_script:
+  - make lint
+
+script:
+  - make
