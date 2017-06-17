@@ -21,14 +21,14 @@ lint:
 
 test:
 	$(eval TMPDIR=$(shell mktemp -d /tmp/nginx.XXXXX))
-	$(eval CONTAINERID=$(shell docker run -tdi -u $(shell id -u) -v ${TMPDIR}:/var/cache/nginx:Z nginxinc/openshift-nginx))
+	$(eval CONTAINERID=$(shell docker run -tdi -u $(shell id -u) -v ${TMPDIR}:/var/cache/nginx:Z ${CONTEXT}/${IMAGE_NAME}:${TARGET}-${VERSION}))
 	@docker exec ${CONTAINERID} curl localhost:8080
 	@docker rm -f ${CONTAINERID}
 	@rm -r ${TMPDIR}
 
 run:
 	$(eval TMPDIR=$(shell mktemp -d /tmp/nginx.XXXXX))
-	docker run -tdi -u $(shell id -u) -p 8080:8080 -v ${TMPDIR}:/var/cache/nginx:Z nginxinc/openshift-nginx
+	docker run -tdi -u $(shell id -u) -p 8080:8080 -v ${TMPDIR}:/var/cache/nginx:Z ${CONTEXT}/${IMAGE_NAME}:${TARGET}-${VERSION}
 
 clean:
 	rm -f build
