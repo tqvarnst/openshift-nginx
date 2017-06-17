@@ -19,5 +19,12 @@ lint:
 	dockerfile_lint -f Dockerfile
 	dockerfile_lint -f Dockerfile.rhel7
 
+test: build
+	$(eval TMPDIR=$(shell mktemp -d /tmp/nginx.XXXXX))
+	$(eval CONTAINERID=$(shell docker run -tdi -u $(shell id -u) -v ${TMPDIR}:/var/cache/nginx:Z nginxinc/openshift-nginx))
+	@docker exec ${CONTAINERID} curl localhost:8080
+	@docker rm -f ${CONTAINERID}
+	@rm -r ${TMPDIR}
+
 clean:
 	rm -f build

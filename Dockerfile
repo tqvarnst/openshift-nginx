@@ -34,9 +34,8 @@ RUN curl -sO http://nginx.org/keys/nginx_signing.key && \
 RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
     ln -sf /dev/stderr /var/log/nginx/error.log
 
-# change pid file location & port to 8080... remove user config for non-root deployment
-RUN sed -i -e '/user/!b' -e '/nginx/!b' -e '/nginx/d' /etc/nginx/nginx.conf && \
-    sed -i -e '/pid/!b' -e '/\/var\/run\/nginx.pid/!b' -e '/\/var\/run\/nginx.pid/d' /etc/nginx/nginx.conf && \
+# change pid file location & port to 8080
+RUN sed -i -e '/pid/!b' -e '/\/var\/run\/nginx.pid/!b' -e '/\/var\/run\/nginx.pid/d' /etc/nginx/nginx.conf && \
     sed -i -e '/listen/!b' -e '/80;/!b' -e 's/80;/8080;/' /etc/nginx/conf.d/default.conf
 
 VOLUME ["/var/cache/nginx"]
