@@ -42,7 +42,7 @@ openshift-test:
 	oc status
 	sleep 5
 	oc describe pod `oc get pod --template '{{(index .items 0).metadata.name }}'`
-	curl `oc get svc/${IMAGE_NAME} -o json | jq -r '.spec.clusterIP'`:`oc get svc/${IMAGE_NAME} -o json | jq -r '.spec.ports[].port'`
+	curl `oc get svc/${IMAGE_NAME} -o json | jq -r '.spec.clusterIP'`:8080
 
 run:
 	$(eval TMPDIR=$(shell mktemp -d /tmp/nginx.XXXXX))
