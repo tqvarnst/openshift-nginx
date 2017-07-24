@@ -44,7 +44,7 @@ test:
 	@echo "Check volume(s)..."
 	@for i in ${VOL_LIST}; do docker exec ${CONTAINERID} mountpoint $${i}; docker exec ${CONTAINERID} mount | grep -w $${i} | grep tmpfs; done
 	@docker exec ${CONTAINERID} curl localhost:8080
-	@docker rm -f ${CONTAINERID}
+	@docker rm -vf ${CONTAINERID}
 
 openshift-test:
 	$(eval PROJ_RANDOM=$(shell shuf -i 100000-999999 -n 1))
@@ -61,8 +61,18 @@ openshift-test:
 	curl `oc get svc/${IMAGE_NAME} --template '{{.spec.clusterIP}}:{{index .spec.ports 0 "port"}}'`
 
 run:
-	$(eval TMPDIR=$(shell mktemp -d /tmp/nginx.XXXXX))
-	docker run -tdi -u $(shell id -u) -p 8080:8080 -v ${TMPDIR}:/var/cache/nginx:Z ${CONTEXT}/${IMAGE_NAME}:${TARGET}-${VERSION}
+	$(eval ARB_UID=$(shell shuf -i 1000010000-1000020000 -n 1))
+	$(eval VOL_LIST=$(shell docker inspect -f '{{range $$p, $$vol := .Config.Volumes}} {{json $$p}} {{end}}' ${CONTEXT}/${IMAGE_NAME}:${TARGET}-${VERSION}))
+	$(eval TMPFS=$(shell for i in ${VOL_LIST}; do VOLS="$${VOLS} --tmpfs $${i}:mode=2777,gid=${ARB_UID}"; done; echo $${VOLS}))
+	docker run -tdi -u ${ARB_UID} --group-add ${ARB_UID} \
+	${TMPFS} \
+	-p 8080:8080 \
+	--cap-drop=KILL \
+	--cap-drop=MKNOD \
+	--cap-drop=SYS_CHROOT \
+	--cap-drop=SETUID \
+	--cap-drop=SETGID \
+	${CONTEXT}/${IMAGE_NAME}:${TARGET}-${VERSION}
 
 clean:
 	rm -f build
