@@ -15,12 +15,6 @@ LABEL name="nginxinc/nginx" \
       io.k8s.display-name="NGINX" \
       io.openshift.expose-services="http:8080" \
       io.openshift.tags="nginx,nginxinc"
-#      run='docker run -tdi --name ${NAME} \
-#        -u $(id -u) \
-#        -p 80:8080 \
-#        -v $(mktemp -d /tmp/nginx.XXXXX):/var/cache/nginx:Z \
-#        ${IMAGE}' \
-#      io.k8s.description="Starter app will do ....." \
 
 ADD nginx.repo /etc/yum.repos.d/nginx.repo
 
@@ -32,11 +26,13 @@ RUN curl -sO http://nginx.org/keys/nginx_signing.key && \
 
 # forward request and error logs to docker log collector
 RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
-    ln -sf /dev/stderr /var/log/nginx/error.log
-
+    ln -sf /dev/stderr /var/log/nginx/error.log && \
 # change pid file location & port to 8080
-RUN sed -i -e '/pid/!b' -e '/\/var\/run\/nginx.pid/!b' -e '/\/var\/run\/nginx.pid/d' /etc/nginx/nginx.conf && \
-    sed -i -e '/listen/!b' -e '/80;/!b' -e 's/80;/8080;/' /etc/nginx/conf.d/default.conf
+    sed -i -e '/pid/!b' -e '/\/var\/run\/nginx.pid/!b' -e '/\/var\/run\/nginx.pid/d' /etc/nginx/nginx.conf && \
+    sed -i -e '/listen/!b' -e '/80;/!b' -e 's/80;/8080;/' /etc/nginx/conf.d/default.conf && \
+# modify perms for non-root runtime
+    chown -R 998 /var/cache/nginx && \
+    chmod -R g=u  /var/cache/nginx
 
 VOLUME ["/var/cache/nginx"]
 
