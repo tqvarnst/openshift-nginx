@@ -28,11 +28,11 @@ RUN curl -sO http://nginx.org/keys/nginx_signing.key && \
 RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
     ln -sf /dev/stderr /var/log/nginx/error.log && \
 # change pid file location & port to 8080
-    sed -i -e '/pid/!b' -e '/\/var\/run\/nginx.pid/!b' -e '/\/var\/run\/nginx.pid/d' /etc/nginx/nginx.conf && \
+    sed -i 's/\/var\/run\/nginx.pid/\/var\/cache\/nginx\/nginx.pid/g' /etc/nginx/nginx.conf && \
     sed -i -e '/listen/!b' -e '/80;/!b' -e 's/80;/8080;/' /etc/nginx/conf.d/default.conf && \
 # modify perms for non-root runtime
-    chown -R 998 /var/cache/nginx && \
-    chmod -R g=u  /var/cache/nginx
+    chown -R 998 /var/cache/nginx /etc/nginx && \
+    chmod -R g=u /var/cache/nginx /etc/nginx
 
 VOLUME ["/var/cache/nginx"]
 
@@ -40,4 +40,4 @@ EXPOSE 8080 8443
 
 USER 998
 
-CMD ["nginx", "-g", "daemon off; pid /var/cache/nginx/nginx.pid;"]
+CMD ["nginx", "-g", "daemon off;"]
