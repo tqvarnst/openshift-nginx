@@ -1,6 +1,6 @@
 FROM docker.io/centos:7
 
-ENV NGINX_VERSION 1.13.4-1.el7
+ENV NGINX_VERSION 1.13.5-1.el7
 
 LABEL name="nginxinc/nginx" \
       maintainer="NGINX Docker Maintainers <docker-maint@nginx.com>" \

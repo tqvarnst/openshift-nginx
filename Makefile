@@ -1,5 +1,5 @@
 CONTEXT = nginxinc
-VERSION = 1.13.3
+VERSION = 1.13.5
 IMAGE_NAME = openshift-nginx
 REGISTRY = docker-registry.default.svc.cluster.local
 OC_USER=developer
