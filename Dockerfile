@@ -29,6 +29,7 @@ RUN set -x \
 		nginx-module-geoip=${NGINX_VERSION} \
 		nginx-module-image-filter=${NGINX_VERSION} \
 		nginx-module-njs=${NJS_VERSION} \
+		nginx-module-echo=${NJS_VERSION} \
 	" \
 	&& case "$dpkgArch" in \
 		amd64|i386) \
